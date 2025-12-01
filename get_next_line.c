@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:48:48 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/01 11:28:00 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/01 19:23:57 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,55 @@ int ft_find_end_of_the_line(char *temp)
 	else
 		return (a);
 }
-char	*ft_lencharline(char *tab, char *str, int fd)
+/* ft_condition_if_buffer_big_to_the_line(int lenstr, char Buffer)
+if (lenstr > BUFFER_SIZE)
+{
+	buffer
+}
+else
+{
+	
+}
+ */
+int	ft_lencharline(char *tab, int fd)
 {
 	int	check_end;
 	int	i;
 	int	j;
+	size_t endfile;
+	int	lenoftheline;
+
+	lenoftheline = 0;
+	i = 0;
+	check_end = 0;
+	endfile = read (fd, tab, BUFFER_SIZE);
+	while (check_end == 0 && endfile > 0)
+	{
+		j = 0;
+		if (ft_find_end_of_the_line(tab) < BUFFER_SIZE)
+			check_end = 1;
+		while (j < ft_find_end_of_the_line(tab))
+		{
+			j++;
+			lenoftheline++;
+		}
+		read (fd, tab, BUFFER_SIZE);
+	}
+	// if (endfile == 0)
+	// 	return (NULL);
+	return (lenoftheline);
+}
+char	*ft_printcharline(char *tab, char *str, int fd)
+{
+	int	check_end;
+	int	i;
+	int	j;
+	size_t endfile;
 
 	i = 0;
 	check_end = 0;
-	read (fd, tab, BUFFER_SIZE);
-	while (check_end == 0)
+	endfile = read (fd, tab, BUFFER_SIZE);
+	while (check_end == 0 && endfile > 0)
 	{
 		j = 0;
 		if (ft_find_end_of_the_line(tab) < BUFFER_SIZE)
@@ -74,20 +113,25 @@ char	*ft_lencharline(char *tab, char *str, int fd)
 			str[i++] = tab[j++];
 		read (fd, tab, BUFFER_SIZE);
 	}
+	if (endfile == 0)
+		return (NULL);
 	str[i] = '\n';
-	str[i++] = '\0';
+	// str[i++] = '\0';
 	return (str);
 }
 char *get_next_line(int fd)
 {
 	static char	tab[BUFFER_SIZE];
+	static char	*stash = NULL;
 	// static char	Buffer[BUFFER_SIZE];
 	char *str;
-	
-	str = malloc(sizeof(char) * 1 + 2); //+ 2 car 1 pour le \n et un pour le \0
+	int	lenoftheline;
+
+	lenoftheline = ft_lencharline(tab, fd);
+	str = malloc(sizeof(char) * lenoftheline + 2); //+ 2 car 1 pour le \n et un pour le \0
 	if (str == NULL)
 		return (NULL);
-	return (ft_lencharline(tab, str , fd));
+	return (ft_printcharline(tab, str , fd));
 
 	/* if( check_end == 0 && !ft_find_end_of_the_line(tab, i, ptr_check_end))
 	{
@@ -124,12 +168,12 @@ int main (void)
 {
 	int	fd = open("./coucou.txt", O_RDONLY);
 	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 }
