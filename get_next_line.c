@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:48:48 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/02 19:38:08 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/03 09:50:33 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,12 @@ char *get_next_line(int fd)
 	static char	buffer[BUFFER_SIZE];
 	static char	*stash = NULL;
 	int	check_end;
-	int	i;
 	char	*line;
 	size_t endfile;
 
-	i = 0;
 	check_end = 0;
 	endfile = read (fd, buffer, BUFFER_SIZE);
-	while (check_end == 0 && endfile > 0)
+	while (check_end == 0 && (endfile <= BUFFER_SIZE || fr_strlen(stash) <= BUFFER_SIZE))
 	{
 		stash = ft_remplir_stash(buffer, stash);
 		if(!ft_find_end_of_the_line(stash, 1))
@@ -118,6 +116,11 @@ char *get_next_line(int fd)
 	}
 	if (endfile == 0)
 		return (NULL);
+	else if  (endfile < BUFFER_SIZE && endfile != 0)
+	{
+		// stash = ft_remplir_stash(buffer, stash);
+		line = ft_line_and_clean_stash(stash, 'l');
+	}
 	stash = ft_line_and_clean_stash(stash, 's');
 	return (line);
 }
