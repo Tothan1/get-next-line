@@ -6,10 +6,9 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:49:06 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/03 08:57:43 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:00:01 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "get_next_line.h"
 
@@ -30,7 +29,7 @@ char	*ft_secondtab(int i, char *newstr, char *s2)
 	int	b;
 
 	b = 0;
-	while (s2 != NULL && s2[b] )
+	while (s2 != NULL && s2[b])
 	{
 		newstr[i] = s2[b];
 		i++;
@@ -53,7 +52,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (newstr == NULL)
 		return (NULL);
 	i = 0;
-	while ( s1 != NULL && s1[i])
+	while (s1 != NULL && s1[i])
 	{
 		newstr[i] = s1[i];
 		i++;
@@ -69,8 +68,6 @@ char	*ft_substr(char *str, unsigned int start, size_t len)
 
 	if (!str)
 		return (NULL);
-	// if (start > ft_strlen(str))
-	// 	return (ft_strdup(""));
 	if (len > ft_strlen(str) - start)
 		alloc_len = ft_strlen(str) - start;
 	else
@@ -87,3 +84,4 @@ char	*ft_substr(char *str, unsigned int start, size_t len)
 	newstr[i] = '\0';
 	return (newstr);
 }
+

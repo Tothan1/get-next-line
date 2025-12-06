@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:48:56 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/03 09:47:36 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:43:18 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 300
+#  define BUFFER_SIZE 1000000
 # endif
 
 # include <unistd.h>
@@ -25,6 +25,7 @@ char	*ft_strjoin(char *s1, char *s2);
 char	*ft_secondtab(int i, char *newstr, char *str2);
 char *ft_remplir_stash (char *buffer, char *stash);
 char *get_next_line(int fd);
+size_t	ft_strlen(char *s);
 
 
 

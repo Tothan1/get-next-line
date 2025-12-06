@@ -6,30 +6,12 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:48:48 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/03 09:50:33 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/06 18:45:52 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "get_next_line.h"
-
-/* int ft_find_end_of_the_line(char *temp, int i, int *ptr_check_end)
-{
-	int	a;
-
-	a = 0;
-	while (temp[i + a] !='\0' && temp[i + a] !='\n')
-		a++;
-	if (temp[i + a] !='\n')
-		return (0);
-	else if(temp[i + a] =='\n')
-		return (a);
-	else
-	{
-		*ptr_check_end = 1;
-		return (a);
-	}
-} */
 
 
 int ft_find_end_of_the_line(char *stash, int	from)
@@ -55,13 +37,11 @@ char	*ft_line_and_clean_stash(char *stash, char from)
 	int	place_n;
 	int	lenstash;
 	char	*line;
+	char *temp_stash;
 
 	lenstash = 0;
 	if (stash != NULL)
-	{
-		while (stash[lenstash])
-				lenstash++;
-	}
+		lenstash = ft_strlen(stash);
 	place_n = ft_find_end_of_the_line(stash, 0);
 	if (from == 'l')
 	{
@@ -70,22 +50,21 @@ char	*ft_line_and_clean_stash(char *stash, char from)
 	}
 	else
 	{
-		stash = ft_substr(stash, place_n + 1, (lenstash - place_n));
+		temp_stash = stash;
+		stash = ft_substr(temp_stash, place_n + 1, (lenstash - place_n));
+		free(temp_stash);
 		return (stash);
 	}
 }
 
-char *ft_remplir_stash (char *buffer, char *stash)
+char	*ft_remplir_stash (char *buffer, char *stash)
 {
 	char	*tempstash;
 	int	lenstash;
 
 	lenstash = 0;
 	if (stash != NULL)
-	{
-		while (stash[lenstash])
-				lenstash++;
-	}
+		lenstash = ft_strlen(stash);
 	tempstash = ft_substr(stash, 0, lenstash);
 	free(stash);
 	stash = ft_strjoin(tempstash, buffer);
@@ -97,13 +76,16 @@ char *get_next_line(int fd)
 {
 	static char	buffer[BUFFER_SIZE];
 	static char	*stash = NULL;
+	static int	Buffer_too_big = 0;
 	int	check_end;
 	char	*line;
 	size_t endfile;
 
 	check_end = 0;
 	endfile = read (fd, buffer, BUFFER_SIZE);
-	while (check_end == 0 && (endfile <= BUFFER_SIZE || fr_strlen(stash) <= BUFFER_SIZE))
+	if (stash == NULL && endfile < BUFFER_SIZE)
+		Buffer_too_big = 1;
+	while (check_end == 0 && endfile != 0 &&(endfile == BUFFER_SIZE || Buffer_too_big == 1))
 	{
 		stash = ft_remplir_stash(buffer, stash);
 		if(!ft_find_end_of_the_line(stash, 1))
@@ -114,31 +96,25 @@ char *get_next_line(int fd)
 		else
 			endfile = read (fd, buffer, BUFFER_SIZE);
 	}
-	if (endfile == 0)
-		return (NULL);
-	else if  (endfile < BUFFER_SIZE && endfile != 0)
-	{
-		// stash = ft_remplir_stash(buffer, stash);
+	if  (endfile < BUFFER_SIZE && ft_strlen(stash) > 0 && check_end == 0)
 		line = ft_line_and_clean_stash(stash, 'l');
-	}
+	else if (endfile == 0)
+		return (NULL);
 	stash = ft_line_and_clean_stash(stash, 's');
 	return (line);
 }
-
-
 
 #include <fcntl.h>
 #include <stdio.h>
 int main (void)
 {
 	int	fd = open("./coucou.txt", O_RDONLY);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
+	
+	char *line;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
 }
