@@ -6,7 +6,7 @@
 /*   By: tle-rhun <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 13:48:48 by tle-rhun          #+#    #+#             */
-/*   Updated: 2025/12/08 18:27:23 by tle-rhun         ###   ########.fr       */
+/*   Updated: 2025/12/09 12:05:08 by tle-rhun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*get_next_line(int fd)
 		stash = ft_line_and_clean_stash(stash, 's');
 	return (result);
 }
-/* 
+
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -127,4 +127,4 @@ int main (void)
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	close(fd);
-} */
+}
